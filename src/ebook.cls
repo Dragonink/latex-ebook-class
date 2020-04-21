@@ -213,7 +213,12 @@
 
 
 %%%* OPTIONS
-\DeclareOption*{\PassOptionsToClass{\CurrentOption}{book}}\ProcessOptions\relax
+\DeclareOption{draft}{
+  \overfullrule=2cm
+  \PassOptionsToClass{\CurrentOption}{book}
+}
+\DeclareOption*{\PassOptionsToClass{\CurrentOption}{book}}
+\ProcessOptions\relax
 
 
 \endinput
