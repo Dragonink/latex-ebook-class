@@ -67,13 +67,13 @@
 \RequirePackage{titletoc}%%* TitleToC
 %* \chapter
 \newlength{\chapterlabel}\settowidth{\chapterlabel}{\large\textsc{\chaptername} \textbf{VIII}}
-\titlecontents{chapter}[0pt]{\large}{\contentspush{\framebox[\chapterlabel][c]{\thecontentslabel}} \textbf}{\hspace{\chapterlabel+2\fboxrule+\wordsep}\textbf}{\hfill\contentspage}
+\titlecontents{chapter}[0pt]{\large}{\contentspush{\framebox[\chapterlabel][c]{\thecontentslabel}} \textbf}{\hspace{\chapterlabel+2\fboxrule+\wordsep}\textbf}{\hfill\thecontentspage}
 %* \section
-\titlecontents{section}[\chapterlabel+2\fboxrule+\wordsep]{}{\,$\bullet$~~}{\,$\bullet$~~}{\titlerule*[1pc]{.}\contentspage}
-\titlecontents{notitle@section}[\chapterlabel+2\fboxrule+\wordsep]{}{\,$\bullet$~~}{\,$\bullet$~~}{\titlerule*[1pc]{.}\contentspage}
+\titlecontents{section}[\chapterlabel+2\fboxrule+\wordsep]{}{\,$\bullet$~~}{\,$\bullet$~~}{\titlerule*[1pc]{.}\thecontentspage}
+\titlecontents{notitle@section}[\chapterlabel+2\fboxrule+\wordsep]{}{\,$\bullet$~~}{\,$\bullet$~~}{\titlerule*[1pc]{.}\thecontentspage}
 %* \figure
-\titlecontents{figure}[0pt]{\large}{\thecontentslabel~~$\bullet$~~}{}{\titlerule*[1pc]{.}\contentspage}
-\RequirePackage[unicode=true,colorlinks=true,bookmarks=true,bookmarksopen=true,pdfdisplaydoctitle=true,pdfduplex=DuplexFlipLongEdge,pdfnonfullscreenpagemode=UseOutlines,pdfpagelayout=TwoPageRight,pdftoolbar=false]{hyperref}%%* HyperRef
+\titlecontents{figure}[0pt]{\large}{\thecontentslabel~~$\bullet$~~}{}{\titlerule*[1pc]{.}\thecontentspage}
+\RequirePackage[unicode=true,colorlinks=true,bookmarks=true,bookmarksopen=true,pdfdisplaydoctitle=true,pdfduplex=DuplexFlipLongEdge,pdfpagelayout=TwoPageRight]{hyperref}%%* HyperRef
 \def\toclevel@chapter{0}
 \def\toclevel@section{1}
 \def\toclevel@notitle@section{1}
