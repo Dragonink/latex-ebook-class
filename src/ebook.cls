@@ -96,7 +96,7 @@
 }
 %* \author
 \providecommand*{\@author}{\@empty}
-\renewcommand*{\and}{,}
+\renewcommand*{\and}{,\space}
 %* \colortheme
 \newif\ifdefined@colortheme
 \defined@colorthemefalse
@@ -204,12 +204,12 @@
   \textbf{\fnsymbol{footnote}}
 }
 %%* PDF metadata
-\ifpdfprimitive\AtBeginDocument{
+\AtBeginDocument{
   \hypersetup{
     pdftitle={\@title},
     pdfauthor={\@author}
   }
-}\fi
+}
 
 
 %%%* OPTIONS
