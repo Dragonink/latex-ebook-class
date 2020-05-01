@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{ebook}[2020/04/21 Dragonink's custom Ebook class v1.1.0]
+\ProvidesClass{ebook}[2020/05/01 Dragonink's custom Ebook class v1.2.0]
 \LoadClass[12pt]{book}
 
 
@@ -164,10 +164,19 @@
   \@ifstar\@star@illustration\@std@illustration
 }
 %* \cover
+\newif\ifused@cover
+\AtBeginDocument{
+  \used@coverfalse
+}
 \newcommand*{\cover}[1]{
-  \begin{titlepage}
-    \illustration*{#1}{img:cover}
-  \end{titlepage}
+  \ifused@cover
+    \ClassWarning{ebook}{Command `\cover' used more than once.}{This instance will be ignored.}
+  \else
+    \begin{titlepage}
+      \illustration*{#1}{img:cover}
+    \end{titlepage}
+    \used@covertrue
+  \fi
 }
 %* \tableofcontents
 \renewcommand*{\tableofcontents}{
@@ -193,15 +202,21 @@
   \old@mainmatter%
   \parskip=\baselineskip%
 }
-%* \include
-\let\old@include\include%
-\renewcommand*{\include}[1]{
-  \old@include{./chapters/#1}
+%* \declarechapter
+\newcommand*{\declarechapter}[1]{
+  \include{./chapters/#1}
 }
 %* \footnote
 \counterwithin*{footnote}{page}
 \renewcommand*{\thefootnote}{
   \textbf{\fnsymbol{footnote}}
+}
+%* \backmatter
+\let\old@backmatter\backmatter%
+\renewcommand*{\backmatter}{
+  \old@backmatter%
+  \newpage\thispagestyle{empty}\mbox{}\newpage
+  \renewcommand*{\chapter}{\@ifstar{\old@chapter*}\std@chapter}
 }
 %%* PDF metadata
 \AtBeginDocument{
