@@ -22,10 +22,12 @@
 %* \chapter
 \titleclass{\chapter}[0]{top}
 \newcounter{display@chapter}
+\newcounter{display@section}[chapter]
 \titleformat{\chapter}[frame]{\filcenter}{\LARGE\enspace\thechapter\enspace}{0pt}{\Huge\bfseries\filcenter#1\vspace{.4em}}
 \titlespacing{\chapter}{0pt}{0pt}{3ex}
 \let\old@chapter\chapter%
 \newcommand*{\star@chapter}[2][\chaptername]{
+  \setcounter{display@section}{0}
   \renewcommand*{\thechapter}{\textsc{#1}}
   \old@chapter{#2}
 }
@@ -38,13 +40,13 @@
 %* \section
 \titleclass{\section}{straight}[\chapter]
 \counterwithout*{section}{chapter}
-\newcounter{display@section}[chapter]
 \titleformat{\section}[block]{\filcenter}{\large\titlerule\enspace\thesection\enspace\titlerule\\*}{0pt}{\Large\bfseries\filcenter#1}
 \titlespacing{\section}{0pt}{2ex}{0pt}
 \titleclass{\notitle@section}{straight}[\chapter]
 \newcounter{notitle@section}
 \renewcommand*{\thenotitle@section}{\thesection}
 \titleformat{\notitle@section}[block]{\filcenter}{\large\titlerule\enspace\thesection\enspace\titlerule}{0pt}{\relax}
+\titleformat{name=\notitle@section,numberless}[block]{\filcenter}{\relax}{0pt}{\large\titlerule\enspace\thesection\enspace\titlerule}
 \titlespacing{\notitle@section}{0pt}{2ex}{0pt}
 \let\old@section\section%
 \let\old@notitle@section\notitle@section%
@@ -213,10 +215,18 @@
 }
 %* \backmatter
 \let\old@backmatter\backmatter%
+\newcommand*{\backmatter@section}[1]{
+  \renewcommand*{\thesection}{\textsc{\MakeLowercase#1}}
+  \old@notitle@section*{#1}
+}
 \renewcommand*{\backmatter}{
   \old@backmatter%
   \newpage\thispagestyle{empty}\mbox{}\newpage
-  \renewcommand*{\chapter}{\@ifstar{\old@chapter*}\std@chapter}
+  \renewcommand*{\chapter}{
+    \setcounter{display@section}{0}
+    \@ifstar{\old@chapter*}{\old@chapter*}
+  }
+  \renewcommand*{\section}{\@ifstar\backmatter@section\backmatter@section}
 }
 %%* PDF metadata
 \AtBeginDocument{
