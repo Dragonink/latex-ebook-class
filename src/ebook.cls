@@ -1,14 +1,65 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{ebook}[2020/05/04 Dragonink's custom Ebook class v1.2.1]
-\LoadClass[12pt]{book}
+\LoadClass{book}
+
+
+%%%* OPTIONS
+\DeclareOption{10pt}{\OptionNotUsed}
+\DeclareOption{11pt}{\OptionNotUsed}
+\DeclareOption{12pt}{
+  \PassOptionsToClass{\CurrentOption}{book}
+  \renewcommand{\normalsize}{\fontsize{12pt}{14.4pt}\selectfont}
+  \renewcommand{\tiny}{\fontsize{8pt}{9.6pt}\selectfont}
+  \renewcommand{\scriptsize}{\fontsize{9pt}{10.8pt}\selectfont}
+  \renewcommand{\footnotesize}{\fontsize{10pt}{12pt}\selectfont}
+  \renewcommand{\small}{\fontsize{11pt}{13.2pt}\selectfont}
+  \renewcommand{\large}{\fontsize{14pt}{16.8pt}\selectfont}
+  \renewcommand{\Large}{\fontsize{17pt}{20.4pt}\selectfont}
+  \renewcommand{\LARGE}{\fontsize{20pt}{24pt}\selectfont}
+  \renewcommand{\huge}{\fontsize{25pt}{30pt}\selectfont}
+  \renewcommand{\Huge}{\fontsize{30pt}{36pt}\selectfont}
+}
+\DeclareOption{14pt}{
+  \renewcommand{\normalsize}{\fontsize{14pt}{16.8pt}\selectfont}
+  \renewcommand{\tiny}{\fontsize{9pt}{10.8pt}\selectfont}
+  \renewcommand{\scriptsize}{\fontsize{10pt}{12pt}\selectfont}
+  \renewcommand{\footnotesize}{\fontsize{11pt}{13.2pt}\selectfont}
+  \renewcommand{\small}{\fontsize{12pt}{14.4pt}\selectfont}
+  \renewcommand{\large}{\fontsize{17pt}{20.4pt}\selectfont}
+  \renewcommand{\Large}{\fontsize{20pt}{24pt}\selectfont}
+  \renewcommand{\LARGE}{\fontsize{25pt}{30pt}\selectfont}
+  \renewcommand{\huge}{\fontsize{30pt}{36pt}\selectfont}
+  \renewcommand{\Huge}{\fontsize{36pt}{43.2pt}\selectfont}
+}
+\DeclareOption{17pt}{
+  \renewcommand{\normalsize}{\fontsize{17pt}{20.4pt}\selectfont}
+  \renewcommand{\tiny}{\fontsize{10pt}{12pt}\selectfont}
+  \renewcommand{\scriptsize}{\fontsize{11pt}{13.2pt}\selectfont}
+  \renewcommand{\footnotesize}{\fontsize{12pt}{14.4pt}\selectfont}
+  \renewcommand{\small}{\fontsize{14pt}{16.8pt}\selectfont}
+  \renewcommand{\large}{\fontsize{20pt}{24pt}\selectfont}
+  \renewcommand{\Large}{\fontsize{25pt}{30pt}\selectfont}
+  \renewcommand{\LARGE}{\fontsize{30pt}{36pt}\selectfont}
+  \renewcommand{\huge}{\fontsize{36pt}{43.2pt}\selectfont}
+  \renewcommand{\Huge}{\fontsize{48pt}{57.6pt}\selectfont}
+}
+\DeclareOption{draft}{
+  \overfullrule=2cm
+  \PassOptionsToClass{\CurrentOption}{book}
+}
+\DeclareOption*{\PassOptionsToClass{\CurrentOption}{book}}
+\ExecuteOptions{14pt}
+\ProcessOptions\relax
 
 
 %%%* PACKAGES
-\RequirePackage{afterpage}%%* AfterPage
+\RequirePackage[utf8]{inputenc}%%* InputEnc
+\RequirePackage[T1]{fontenc}%%* FontEnc
+\RequirePackage{lmodern}%%* LatinModern
 \RequirePackage{geometry}%%* Geometry
 \RequirePackage[cm]{fullpage}%%* FullPage
+\RequirePackage{afterpage}%%* AfterPage
 \RequirePackage{pdfpages}%%* PDFPages
-\RequirePackage[utf8]{inputenc}%%* InputEnc
 \RequirePackage{babel}%%* Babel
 \addto\captionsenglish{
   \renewcommand*{\contentsname}{Table of Contents}
@@ -23,7 +74,8 @@
 \titleclass{\chapter}[0]{top}
 \newcounter{display@chapter}
 \newcounter{display@section}[chapter]
-\titleformat{\chapter}[frame]{\filcenter}{\LARGE\enspace\thechapter\enspace}{0pt}{\Huge\bfseries\filcenter#1\vspace{.4em}}
+\newlength{\width@chaptertitle}
+\titleformat{\chapter}[frame]{\filcenter}{\LARGE\enspace\thechapter\enspace}{0pt}{\Huge\bfseries\filcenter#1\settowidth{\width@chaptertitle}{#1}\ifdim\width@chaptertitle<\textwidth\vspace{.3em}\fi}
 \titlespacing{\chapter}{0pt}{0pt}{3ex}
 \let\old@chapter\chapter%
 \newcommand*{\star@chapter}[2][\chaptername]{
@@ -68,13 +120,14 @@
 \renewcommand*{\section}{\@ifstar\notitle@section\@@section}
 \RequirePackage{titletoc}%%* TitleToC
 %* \chapter
-\newlength{\chapterlabel}\settowidth{\chapterlabel}{\large\textsc{\chaptername} \textbf{VIII}}
-\titlecontents{chapter}[0pt]{\large}{\contentspush{\framebox[\chapterlabel][c]{\thecontentslabel}} \textbf}{\hspace{\chapterlabel+2\fboxrule+\wordsep}\textbf}{\hfill\thecontentspage}
+\newlength{\width@chapterlabel}
+\settowidth{\width@chapterlabel}{\large\textsc{\chaptername}\ \textbf{XVI}}
+\titlecontents{chapter}[0pt]{}{\contentspush{\framebox[\width@chapterlabel]{\thecontentslabel}} \textbf}{\hspace{\width@chapterlabel+2\fboxsep+2\fboxrule+\wordsep}\textbf}{\hfill\thecontentspage}
 %* \section
-\titlecontents{section}[\chapterlabel+2\fboxrule+\wordsep]{}{\,$\bullet$~~}{\,$\bullet$~~}{\titlerule*[1pc]{.}\thecontentspage}
-\titlecontents{notitle@section}[\chapterlabel+2\fboxrule+\wordsep]{}{\,$\bullet$~~}{\,$\bullet$~~}{\titlerule*[1pc]{.}\thecontentspage}
+\titlecontents{section}[\width@chapterlabel+2\fboxsep+2\fboxrule]{\small}{\,$\bullet$~~}{\,$\bullet$~~}{\titlerule*[1pc]{.}\thecontentspage}
+\titlecontents{notitle@section}[\width@chapterlabel+2\fboxsep+2\fboxrule]{\small}{\,$\bullet$~~}{\,$\bullet$~~}{\titlerule*[1pc]{.}\thecontentspage}
 %* \figure
-\titlecontents{figure}[0pt]{\large}{\thecontentslabel~~$\bullet$~~}{}{\titlerule*[1pc]{.}\thecontentspage}
+\titlecontents{figure}[0pt]{\small}{\thecontentslabel~~$\bullet$~~\normalsize}{}{\titlerule*[1pc]{.}\thecontentspage}
 \RequirePackage[unicode=true,colorlinks=true,bookmarks=true,bookmarksopen=true,pdfdisplaydoctitle=true,pdfduplex=DuplexFlipLongEdge,pdfpagelayout=TwoPageRight]{hyperref}%%* HyperRef
 \def\toclevel@chapter{0}
 \def\toclevel@section{1}
@@ -95,10 +148,15 @@
   \else
     \renewcommand*{\@title}{(\@series\ \textemdash\ \arabic{@series}) #1}
   \fi
+  \hypersetup{pdftitle={\@title}}
 }
 %* \author
 \providecommand*{\@author}{\@empty}
 \renewcommand*{\and}{,\space}
+\renewcommand*{\author}[1]{
+  \renewcommand*{\@author}{#1}
+  \hypersetup{pdfauthor={\@author}}
+}
 %* \colortheme
 \newif\ifdefined@colortheme
 \defined@colorthemefalse
@@ -184,7 +242,7 @@
 \renewcommand*{\tableofcontents}{
   \clearpage
   \begin{center}
-    \Huge\bfseries\contentsname%
+    {\huge\bfseries\contentsname}
   \end{center}
   \vspace{3ex}
   \@starttoc{toc}
@@ -193,7 +251,7 @@
 \renewcommand*{\listoffigures}{
   \clearpage
   \begin{center}
-    \Huge\bfseries\listfigurename%
+    {\huge\bfseries\listfigurename}
   \end{center}
   \vspace{3ex}
   \@starttoc{lof}
@@ -228,22 +286,6 @@
   }
   \renewcommand*{\section}{\@ifstar\backmatter@section\backmatter@section}
 }
-%%* PDF metadata
-\AtBeginDocument{
-  \hypersetup{
-    pdftitle={\@title},
-    pdfauthor={\@author}
-  }
-}
-
-
-%%%* OPTIONS
-\DeclareOption{draft}{
-  \overfullrule=2cm
-  \PassOptionsToClass{\CurrentOption}{book}
-}
-\DeclareOption*{\PassOptionsToClass{\CurrentOption}{book}}
-\ProcessOptions\relax
 
 
 \endinput
