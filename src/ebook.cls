@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{ebook}[2020/05/04 Dragonink's custom Ebook class v1.2.1]
+\ProvidesClass{ebook}[2020/05/06 Dragonink's custom Ebook class v1.3.0]
 \LoadClass{book}
 
 
